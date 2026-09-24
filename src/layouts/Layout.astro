@@ -1,4 +1,5 @@
 ---
+import Matomo from '../components/analytics/Matomo.astro';
 import { siteConfig } from '../config/site.config';
 
 interface Props {
@@ -52,7 +53,9 @@ const alternateEs = new URL('/es' + Astro.url.pathname.replace(/^\/(en|es)/, '')
         font-family: 'Plus Jakarta Sans', sans-serif;
       }
     </style>
-  </head>
+    <!-- Matomo Tag Manager (Privacy-First / Cookieless) -->
+  <Matomo />
+</head>
   <body class="flex min-h-screen flex-col bg-[#090e17] text-slate-200">
     <!-- Header Dusk -->
     <header class="sticky top-0 z-50 border-b border-slate-800/80 bg-[#090e17]/90 backdrop-blur-md">
