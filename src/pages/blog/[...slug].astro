@@ -1,0 +1,55 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map(post => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<Layout title={post.data.title + ' — Vendre ou Louer'} description={post.data.description}>
+  <article class="py-12 bg-[#090e17]">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6">
+      
+      <!-- Breadcrumb -->
+      <div class="flex items-center gap-2 text-xs text-slate-400 mb-6 font-semibold">
+        <a href="/" class="hover:text-amber-400">Accueil</a>
+        <span>/</span>
+        <a href="/blog/" class="hover:text-amber-400">Guides</a>
+        <span>/</span>
+        <span class="text-amber-400">{post.data.category || 'Arbitrage'}</span>
+      </div>
+
+      <!-- Header -->
+      <header class="border-b border-slate-800 pb-8 mb-8">
+        <span class="text-xs uppercase tracking-widest text-amber-400 font-semibold mb-3 block">DOSSIER EXPERTISE PATRIMONIALE</span>
+        <h1 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+          {post.data.title}
+        </h1>
+        <div class="mt-4 flex items-center gap-4 text-xs text-slate-400">
+          <span>Publié le {new Date(post.data.pubDate).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+          <span>•</span>
+          <span>Rédaction Vendre ou Louer</span>
+        </div>
+      </header>
+
+      <!-- Content -->
+      <div class="prose prose-invert prose-slate max-w-none prose-headings:font-bold prose-headings:text-white prose-a:text-amber-400 leading-relaxed text-slate-300">
+        <Content />
+      </div>
+
+      <!-- Footer -->
+      <footer class="mt-12 border-t border-slate-800 pt-8 text-xs flex justify-between items-center text-slate-400">
+        <a href="/blog/" class="text-amber-400 hover:underline font-semibold">← Retour à tous les guides</a>
+        <span>Vendre ou Louer Intelligence</span>
+      </footer>
+    </div>
+  </article>
+</Layout>

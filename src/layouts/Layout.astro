@@ -1,0 +1,135 @@
+---
+import { siteConfig } from '../config/site.config';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  lang?: string;
+}
+
+const {
+  title = siteConfig.title,
+  description = siteConfig.description,
+  image = '/images/og-image.jpg',
+  lang = 'fr',
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || siteConfig.url);
+const alternateFr = new URL(Astro.url.pathname.replace(/^\/(en|es)/, ''), siteConfig.url);
+const alternateEn = new URL('/en' + Astro.url.pathname.replace(/^\/(en|es)/, ''), siteConfig.url);
+const alternateEs = new URL('/es' + Astro.url.pathname.replace(/^\/(en|es)/, ''), siteConfig.url);
+---
+
+<!DOCTYPE html>
+<html lang={lang} class="scroll-smooth bg-[#090e17] text-slate-100 antialiased selection:bg-amber-500 selection:text-slate-950">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <link rel="alternate" hreflang="fr" href={alternateFr} />
+    <link rel="alternate" hreflang="en" href={alternateEn} />
+    <link rel="alternate" hreflang="es" href={alternateEs} />
+    <link rel="alternate" hreflang="x-default" href={alternateFr} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={image} />
+
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style is:global>
+      body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+      }
+    </style>
+  </head>
+  <body class="flex min-h-screen flex-col bg-[#090e17] text-slate-200">
+    <!-- Header Dusk -->
+    <header class="sticky top-0 z-50 border-b border-slate-800/80 bg-[#090e17]/90 backdrop-blur-md">
+      <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6">
+        <a href="/" class="flex items-center gap-3">
+          <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-tr from-amber-500 to-amber-600 font-extrabold text-slate-950 shadow-md shadow-amber-900/30">
+            VOL
+          </div>
+          <div>
+            <span class="block text-base font-extrabold tracking-tight text-white uppercase">VENDRE OU LOUER</span>
+            <span class="block text-[10px] font-semibold tracking-wider text-amber-400 uppercase">Arbitrage Immobilier Antilles</span>
+          </div>
+        </a>
+
+        <!-- Navigation Links -->
+        <nav class="hidden md:flex items-center gap-7 text-xs font-semibold text-slate-300">
+          <a href="/blog/" class="hover:text-amber-400 transition-colors uppercase">VENTE VS LOCATION</a>
+          <a href="/blog/" class="hover:text-amber-400 transition-colors uppercase">ESTIMATION VÉNALE</a>
+          <a href="/blog/" class="hover:text-amber-400 transition-colors uppercase">FISCALITÉ PLUS-VALUE</a>
+          <a href="/mentions-legales/" class="hover:text-amber-400 transition-colors uppercase">MÉTHODOLOGIE</a>
+        </nav>
+
+        <!-- Languages & Badges -->
+        <div class="flex items-center gap-3">
+          <div class="hidden sm:flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-950/30 px-3 py-1 text-[11px] text-amber-300 font-semibold">
+            <span class="h-1.5 w-1.5 rounded-full bg-amber-400"></span>
+            DÉCISION PATRIMONIALE
+          </div>
+          <div class="flex items-center gap-1.5 text-xs text-slate-400 border-l border-slate-800 pl-3 font-semibold">
+            <a href="/" class="px-1.5 py-0.5 rounded text-slate-950 bg-amber-400 font-bold">FR</a>
+            <a href="/en/" class="px-1.5 py-0.5 rounded hover:text-white">EN</a>
+            <a href="/es/" class="px-1.5 py-0.5 rounded hover:text-white">ES</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-grow">
+      <slot />
+    </main>
+
+    <!-- Footer Dusk -->
+    <footer class="border-t border-slate-800 bg-[#060910] py-12 text-slate-400 text-xs">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <div class="md:col-span-2">
+            <div class="flex items-center gap-2 mb-3">
+              <div class="h-7 w-7 rounded bg-amber-500 font-bold text-slate-950 flex items-center justify-center text-xs">VOL</div>
+              <span class="text-sm font-bold text-white">VENDRE OU LOUER ÉDITORIAL</span>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed max-w-md">
+              Portail indépendant d'expertise patrimoniale et d'aide à la décision pour les propriétaires immobiliers en Guadeloupe, Martinique, Saint-Martin et Saint-Barthélemy.
+            </p>
+          </div>
+          <div>
+            <h4 class="text-slate-200 font-semibold mb-3 tracking-wider text-[11px] uppercase">Navigation</h4>
+            <ul class="space-y-2 text-slate-400">
+              <li><a href="/" class="hover:text-amber-400 transition-colors">Accueil</a></li>
+              <li><a href="/blog/" class="hover:text-amber-400 transition-colors">Tous les Guides d'Arbitrage</a></li>
+              <li><a href="/en/" class="hover:text-amber-400 transition-colors">English Edition</a></li>
+              <li><a href="/es/" class="hover:text-amber-400 transition-colors">Edición en Español</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-slate-200 font-semibold mb-3 tracking-wider text-[11px] uppercase">Légal & Normes</h4>
+            <ul class="space-y-2 text-slate-400">
+              <li><a href="/mentions-legales/" class="hover:text-amber-400 transition-colors">Mentions Légales</a></li>
+              <li><a href="/politique-confidentialite/" class="hover:text-amber-400 transition-colors">Politique de Confidentialité</a></li>
+              <li><span class="text-slate-500">100% Cookieless RGPD</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="border-t border-slate-800/80 pt-6 flex flex-col sm:flex-row justify-between items-center text-[11px] text-slate-500">
+          <p>© {new Date().getFullYear()} Vendre ou Louer — Décisions immobilières aux Antilles.</p>
+          <p class="mt-2 sm:mt-0 font-semibold text-amber-400">LEXINGTON DUSK ARCHITECTURE</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
